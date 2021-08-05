@@ -117,7 +117,7 @@ class bsub(object):
         # grab the integer id or the name depending on whether they requested
         # names=True
         return [x.split(None, 7)[-2 if names else 0]
-                for x in sp.check_output(["bjobs", "-w"])\
+                for x in sp.check_output(["bjobs", "-w"], stderr=sp.PIPE)\
                            .decode().rstrip().split("\n")[1:]
                            if x.strip()
                ]
@@ -125,7 +125,7 @@ class bsub(object):
     @classmethod
     def pending_jobs(self, names=False):
         return [x.split(None, 7)[-2 if names else 0]
-                for x in sp.check_output(["bjobs", "-w", "-a"])\
+                for x in sp.check_output(["bjobs", "-w", "-a"], stderr=sp.PIPE)\
                            .decode().rstrip().split("\n")[1:]
                            if x.strip() and x.split(None, 7)[2] in ["PEND"]
                ]
@@ -136,7 +136,7 @@ class bsub(object):
             Return all completed jobs.
         """
         return [x.split(None, 7)[-2 if names else 0]
-                for x in sp.check_output(["bjobs", "-w", "-a"])\
+                for x in sp.check_output(["bjobs", "-w", "-a"], stderr=sp.PIPE)\
                            .decode().rstrip().split("\n")[1:]
                            if x.strip() and x.split(None, 7)[2] in ["DONE", "EXIT"]
                ]
